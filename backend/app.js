@@ -8,6 +8,7 @@ const awsServerlessExpressMiddleware = require('aws-serverless-express/middlewar
 const app = express()
 const router = express.Router()
 const AWS = require('aws-sdk')
+const jwt = require('express-jwt')
 const dynamodb = new AWS.DynamoDB.DocumentClient({region: 'us-west-2'})
 const tableName = 'Twitch_Questions';
 
@@ -19,11 +20,14 @@ if (process.env.NODE_ENV === 'test') {
 } else {
   router.use(compression())
 }
-
+//const secret = Buffer.from(process.env.ENV_SECRET || 'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk', 'base64');
 router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(awsServerlessExpressMiddleware.eventContext())
+
+// Auth protected routes for twitch extension
+//router.use(jwt({ secret }))
 
 router.get('/questions', async (req, res) =>{
   
@@ -36,6 +40,58 @@ router.get('/channelquestions', async (req, res) => {
   res.json(questions);
 })
 
+router.put('/question', async (req, res) => {
+  console.log(req.body);
+  let put = await putQuestion(req.body);
+  res.json(put);
+})
+
+router.post('/answer', async (req, res) => {
+  let answer = await updateQuestionAnswer(req.body);
+  res.json(answer);
+})
+
+const putQuestion = async(questionBody) => {
+  console.log(questionBody);
+  const { user_id, channel_id, question, postedToForum } = questionBody;
+  var params = {
+    TableName: tableName,
+    Item: {
+        user_id, channel_id, question, postedToForum
+    }
+  }
+
+  try{
+    let data = await dynamodb.put(params).promise();
+    console.log(data);
+    return data;
+  } catch(error) {
+      return error;
+  }
+
+}
+
+const updateQuestionAnswer = async(question) => {
+  var params = {
+    TableName:tableName,
+    Key:{
+        "user_id": question.user_id
+    },
+    UpdateExpression: "set answer=:answer",
+    ExpressionAttributeValues:{
+        ":answer": question.answer
+    },
+    ReturnValues:"UPDATED_NEW"
+  };
+
+  try{
+    let data = await dynamodb.update(params).promise();
+    console.log(data);
+    return data;
+  } catch(error) {
+      return error;
+  }
+}
 
 const getQuestionsByUser = async (userid) => {
  
