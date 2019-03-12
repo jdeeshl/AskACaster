@@ -11,6 +11,7 @@ const AWS = require('aws-sdk')
 const jwt = require('express-jwt')
 const dynamodb = new AWS.DynamoDB.DocumentClient({region: 'us-west-2'})
 const tableName = 'Twitch_Questions';
+const uuidv4 = require('uuid/v4');
 
 
 if (process.env.NODE_ENV === 'test') {
@@ -54,10 +55,11 @@ router.post('/answer', async (req, res) => {
 const putQuestion = async(questionBody) => {
   console.log(questionBody);
   const { user_id, channel_id, question, postedToForum } = questionBody;
+  const id = uuidv4(); 
   var params = {
     TableName: tableName,
     Item: {
-        user_id, channel_id, question, postedToForum
+      id, user_id, channel_id, question, postedToForum
     }
   }
 
@@ -98,7 +100,7 @@ const getQuestionsByUser = async (userid) => {
   var params = {
     ExpressionAttributeValues: { ":userId":  userid}, 
     KeyConditionExpression: "user_id = :userId", 
-    ProjectionExpression: "user_id, channel_id, question, answer", 
+    IndexName: "user_id-index",
     TableName: tableName
    };
    
