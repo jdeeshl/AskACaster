@@ -20,11 +20,8 @@ let userID = '';
 let channelID= '';
 let token = '';
 
-window.Twitch.ext.onAuthorized(function(auth) {
-  userID = auth.userId;
-  channelID = auth.channelId; 
-  token = auth.token;
-});
+
+
 
 export default {
   name: 'Panel',
@@ -36,7 +33,8 @@ export default {
   },
   methods: {
       pullQuestions(){
-          fetch(ROOT_URL + 'questions?user_id=mauerbac',{
+          console.log(`${ROOT_URL}questions?user_id=${userID}`);
+          fetch(`${ROOT_URL}questions?user_id=${userID}`,{
               method: 'GET',
               headers: new Headers({'Content-Type': 'application/json'})
           }).then(data => data.json()).then(result => {
@@ -57,8 +55,16 @@ export default {
           })
       }
   },
-  beforeMount() {
-      this.pullQuestions();
+  async beforeMount() {
+    console.log(`This is the userID:${userID}`);
+    await window.Twitch.ext.onAuthorized((auth) => {  
+    userID = auth.userId;
+    channelID = auth.channelId; 
+    token = auth.token;
+    console.log(`does the userID load ${userID}`);
+    this.pullQuestions();
+});
+    
   }
 }
 </script>
