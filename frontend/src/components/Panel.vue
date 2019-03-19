@@ -19,6 +19,7 @@ const ROOT_URL = 'http://127.0.0.1:3000/';
 let userID = '';
 let channelID= '';
 let token = '';
+const twitch = window.Twitch.ext;
 
 
 
@@ -36,16 +37,16 @@ export default {
           console.log(`${ROOT_URL}questions?user_id=${userID}`);
           fetch(`${ROOT_URL}questions?user_id=${userID}`,{
               method: 'GET',
-              headers: new Headers({'Content-Type': 'application/json'})
+              headers: new Headers({'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`})
           }).then(data => data.json()).then(result => {
-              console.log(result);
+              twitch.rig.log(result);
               this.questions = result;
           });
       },
       askAQuestion(){
           fetch(`${ROOT_URL}question`, {
               method: 'PUT',
-              headers: new Headers({'Content-Type': 'application/json'}),
+              headers: new Headers({'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}),
               body: JSON.stringify({
                     user_id: `${userID}`,
                     channel_id: `${channelID}`,
@@ -57,7 +58,7 @@ export default {
   },
   async beforeMount() {
     console.log(`This is the userID:${userID}`);
-    await window.Twitch.ext.onAuthorized((auth) => {  
+    await twitch.onAuthorized((auth) => {  
     userID = auth.userId;
     channelID = auth.channelId; 
     token = auth.token;

@@ -21,14 +21,17 @@ if (process.env.NODE_ENV === 'test') {
 } else {
   router.use(compression())
 }
-//const secret = Buffer.from(process.env.ENV_SECRET || 'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk', 'base64');
+//secret is beOUqTTTQbhr4eu5ljsbDYp7Cwp0dVH8f/1GeVbW3hg=
+// const secret = Buffer.from(process.env.ENV_SECRET || 'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk', 'base64');
+const secret = Buffer.from('beOUqTTTQbhr4eu5ljsbDYp7Cwp0dVH8f/1GeVbW3hg=', 'base64');
+
 router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(awsServerlessExpressMiddleware.eventContext())
 
 // Auth protected routes for twitch extension
-//router.use(jwt({ secret }))
+app.use(jwt({ secret }));
 
 router.get('/questions', async (req, res) =>{
   

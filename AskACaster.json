@@ -1,0 +1,78 @@
+{
+  "allowHttpBackend": false,
+  "backendCommand": "sam local start-api",
+  "backendFolderName": "/Users/nickik/Projects/AskCaster/backend",
+  "extensionViews": [
+    {
+      "id": "1",
+      "label": "Panel",
+      "channelId": "265737932",
+      "type": "panel",
+      "features": {
+        "isChatEnabled": false
+      },
+      "linked": false,
+      "linkedUserId": "",
+      "mode": "viewer",
+      "isPopout": false,
+      "role": "Logged-In Viewer",
+      "x": 0,
+      "y": 0,
+      "orientation": "Portrait",
+      "frameSize": {
+        "width": 640,
+        "height": 480
+      }
+    }
+  ],
+  "manifest": {
+    "anchor": "panel",
+    "assetUrls": [],
+    "authorName": "",
+    "bitsEnabled": false,
+    "canInstall": true,
+    "configUrl": "http://localhost:8080/config.html",
+    "configurationLocation": "none",
+    "description": "AskACaster",
+    "eulaTosUrl": "",
+    "hasChatSupport": false,
+    "iconUrl": "",
+    "iconUrls": {},
+    "id": "wkor7zg4sgp2joyf3fxkm2gq8j6kb6",
+    "installationCount": -42,
+    "liveConfigUrl": "",
+    "name": "AskACaster",
+    "panelHeight": 300,
+    "privacyPolicyUrl": "",
+    "requestIdentityLink": false,
+    "requiredBroadcasterAbilities": [],
+    "screenshotUrls": [],
+    "sku": "",
+    "state": "Testing",
+    "subscriptionsSupportLevel": "none",
+    "summary": "AskACaster",
+    "supportEmail": "",
+    "vendorCode": "",
+    "version": "0.0.1",
+    "viewerUrl": "http://localhost:8080/panel.html",
+    "viewerUrls": {
+      "panel": "http://localhost:8080/panel.html"
+    },
+    "views": {
+      "panel": {
+        "viewerUrl": "http://localhost:8080/panel.html",
+        "height": 300,
+        "canLinkExternalContent": false
+      },
+      "config": {
+        "viewerUrl": "http://localhost:8080/config.html",
+        "canLinkExternalContent": false
+      }
+    },
+    "whitelistedConfigUrls": [],
+    "whitelistedPanelUrls": []
+  },
+  "frontendCommand": "npm run dev",
+  "frontendFolderName": "/Users/nickik/Projects/AskCaster/frontend",
+  "name": "AskACaster"
+}
