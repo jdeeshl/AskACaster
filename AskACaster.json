@@ -6,16 +6,38 @@
     {
       "id": "1",
       "label": "Panel",
-      "channelId": "265737932",
+      "channelId": "182891647",
       "type": "panel",
       "features": {
         "isChatEnabled": false
       },
       "linked": false,
       "linkedUserId": "",
+      "opaqueId": "1234",
       "mode": "viewer",
       "isPopout": false,
       "role": "Logged-In Viewer",
+      "x": 0,
+      "y": 0,
+      "orientation": "Portrait",
+      "frameSize": {
+        "width": 640,
+        "height": 480
+      }
+    },
+    {
+      "id": "2",
+      "label": "LiveConfig",
+      "channelId": "182891647",
+      "type": "dashboard",
+      "features": {
+        "isChatEnabled": false
+      },
+      "linked": true,
+      "linkedUserId": "265737932",
+      "mode": "dashboard",
+      "isPopout": false,
+      "role": "Broadcaster",
       "x": 0,
       "y": 0,
       "orientation": "Portrait",
@@ -40,7 +62,7 @@
     "iconUrls": {},
     "id": "wkor7zg4sgp2joyf3fxkm2gq8j6kb6",
     "installationCount": -42,
-    "liveConfigUrl": "",
+    "liveConfigUrl": "http://localhost:8080/live_config.html",
     "name": "AskACaster",
     "panelHeight": 300,
     "privacyPolicyUrl": "",
@@ -53,7 +75,7 @@
     "summary": "AskACaster",
     "supportEmail": "",
     "vendorCode": "",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "viewerUrl": "http://localhost:8080/panel.html",
     "viewerUrls": {
       "panel": "http://localhost:8080/panel.html"
@@ -66,6 +88,10 @@
       },
       "config": {
         "viewerUrl": "http://localhost:8080/config.html",
+        "canLinkExternalContent": false
+      },
+      "liveConfig": {
+        "viewerUrl": "http://localhost:8080/live_config.html",
         "canLinkExternalContent": false
       }
     },

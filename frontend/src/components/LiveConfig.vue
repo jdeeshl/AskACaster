@@ -1,16 +1,16 @@
 <template>
     <div class="container">
-        <h1>Ask A Question</h1>
-        <b-form-textarea v-model="questionText" id="textarea-small" size="sm" placeholder="Ask the broadcaster a question..." />
-        <b-button @click="askAQuestion" variant="outline-primary">Submit Question</b-button>
         <div v-show="questions.length > 0">
-            <h3> Previous Questions </h3> 
-                  
+            <h3> Channel Questions </h3> 
             <b-list-group>
-                <b-list-group-item v-for="(question, index) in questions" :key=index>
-                    <p>Q: {{question.question}}</p>
-                    <p v-if="question.answer != ''">A: {{question.answer}}</p>
-                </b-list-group-item>
+                    <b-list-group-item v-for="(question, index) in questions" :key=index>
+                        <p>{{question.question}}</p>
+                        <button @click="showInputChange" class="btn btn-info">Answer</button>
+                        <div v-if="showInput">
+                            <input type="text" v-model="answerText" class="form-control"  />
+                            <button @click="submitAnswer(question.id)" class="btn btn-primary">Submit Answer</button>
+                        </div>
+                    </b-list-group-item>
             </b-list-group>
         </div>
 
@@ -26,17 +26,18 @@ const twitch = window.Twitch.ext;
 
 
 export default {
-  name: 'Panel',
+  name: 'LiveConfig',
   data() {
       return {
           questions: [],
-          questionText: '',
+          showInput: false,
+          answerText: ''
       }
   },
   methods: {
       pullQuestions(){
-          console.log(`${ROOT_URL}questions?user_id=${userID}`);
-          fetch(`${ROOT_URL}questions?user_id=${userID}`,{
+
+          fetch(`${ROOT_URL}channelquestions?channel_id=${channelID}`,{
               method: 'GET',
               headers: new Headers({'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`})
           }).then(data => data.json()).then(result => {
@@ -44,31 +45,33 @@ export default {
               this.questions = result;
           });
       },
-      askAQuestion(){
-          fetch(`${ROOT_URL}question`, {
-              method: 'PUT',
+      showInputChange(){
+          twitch.rig.log(`showInput: ${this.showInput}`);
+          this.showInput = !this.showInput;
+      },
+      submitAnswer(id) {
+          fetch(`${ROOT_URL}answer`, {
+              method: 'POST',
               headers: new Headers({'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}),
               body: JSON.stringify({
-                    user_id: `${userID}`,
-                    channel_id: `${channelID}`,
-                    question: this.questionText,
-                    postedToForum: false
-              })
+                  answer: this.answerText,
+                  id: id
+                  })
           }).then(result => result.json())
           .then(data => {
-              //refresh questions
-              this.questionText = '';
-              this.pullQuestions();
+              console.log(data);
           })
       }
+
   },
   async beforeMount() {
     console.log(`This is the userID:${userID}`);
     await twitch.onAuthorized((auth) => {  
     userID = auth.userId;
-    twitch.rig.log(`userID: ${userID}`);
+   
     channelID = auth.channelId; 
     token = auth.token;
+    twitch.rig.log(`channelID: ${channelID}`);
     console.log(`does the userID load ${userID}`);
     this.pullQuestions();
 });

@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'test') {
 //secret is beOUqTTTQbhr4eu5ljsbDYp7Cwp0dVH8f/1GeVbW3hg=
 // const secret = Buffer.from(process.env.ENV_SECRET || 'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk', 'base64');
 const secret = Buffer.from('beOUqTTTQbhr4eu5ljsbDYp7Cwp0dVH8f/1GeVbW3hg=', 'base64');
-
+console.log(`secret ${process.env.TWITCH_SECRET}`);
 router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
@@ -80,7 +80,7 @@ const updateQuestionAnswer = async(question) => {
   var params = {
     TableName:tableName,
     Key:{
-        "user_id": question.user_id
+        "id": question.id
     },
     UpdateExpression: "set answer=:answer",
     ExpressionAttributeValues:{
