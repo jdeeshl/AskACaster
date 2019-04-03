@@ -1,15 +1,16 @@
 <template>
     <div class="container">
-        <h1>Ask A Question</h1>
+        <h2 class="title">Ask A Question</h2>
+        <hr />
         <b-form-textarea v-model="questionText" id="textarea-small" size="sm" placeholder="Ask the broadcaster a question..." />
-        <b-button @click="askAQuestion" variant="outline-primary">Submit Question</b-button>
+        <b-button class="askQuestionBtn pull-right" @click="askAQuestion" variant="primary">Submit Question</b-button>
         <div v-show="questions.length > 0">
-            <h3> Previous Questions </h3> 
-                  
-            <b-list-group>
-                <b-list-group-item v-for="(question, index) in questions" :key=index>
-                    <p>Q: {{question.question}}</p>
-                    <p v-if="question.answer != ''">A: {{question.answer}}</p>
+            <h3 class="previousTitle"> Previous Questions </h3> 
+            <b-alert variant="success" v-show="showAlert">{{uiMessage}}</b-alert>
+            <b-list-group v-for="(question, index) in questions" :key="index">
+                <b-list-group-item >
+                    <p class="questionText"><b>Q: {{question.question}}</b></p>
+                    <p class="questionText" v-show="question.answer != null && question.answer != ''"><b>A: </b>{{question.answer}}</p>
                 </b-list-group-item>
             </b-list-group>
         </div>
@@ -31,6 +32,8 @@ export default {
       return {
           questions: [],
           questionText: '',
+          uiMessage: '',
+          showAlert: false,
       }
   },
   methods: {
@@ -59,6 +62,8 @@ export default {
               //refresh questions
               this.questionText = '';
               this.pullQuestions();
+              this.uiMessage = 'Question Submitted';
+              this.showAlert = true;
           })
       }
   },
@@ -76,3 +81,24 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.askQuestionBtn {
+    margin-top: 10px;
+    padding-right: 80px;
+    padding-left: 80px;
+    background-color: #6441A4;
+    color: #f8991d !important;
+    font-weight: bold;
+}
+
+.previousTitle {
+    margin-top: 20px;
+}
+.questionText {
+    text-align: left;
+}
+
+
+</style>

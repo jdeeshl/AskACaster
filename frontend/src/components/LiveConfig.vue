@@ -2,13 +2,14 @@
     <div class="container">
         <div v-show="questions.length > 0">
             <h3> Channel Questions </h3> 
+            <hr />
             <b-list-group>
-                    <b-list-group-item v-for="(question, index) in questions" :key=index>
-                        <p>{{question.question}}</p>
-                        <button @click="showInputChange" class="btn btn-info">Answer</button>
-                        <div v-if="showInput">
-                            <input type="text" v-model="answerText" class="form-control"  />
-                            <button @click="submitAnswer(question.id)" class="btn btn-primary">Submit Answer</button>
+                    <b-list-group-item v-for="(question, index) in questions" :key="index">
+                        <p class="questionTitle"><b>{{question.question}}</b></p>
+                        <b-button @click="showInputChange(index)" class="answerBtn" variant="primary">Answer</b-button>
+                        <div :key="index" v-if="showInput[index]">
+                            <input type="text" v-model="answerText[index]" class="form-control"  />
+                            <b-button @click="submitAnswer(question.id, index)" class="submitAnswerBtn" variant="primary">Submit</b-button>
                         </div>
                     </b-list-group-item>
             </b-list-group>
@@ -30,8 +31,8 @@ export default {
   data() {
       return {
           questions: [],
-          showInput: false,
-          answerText: ''
+          showInput: [],
+          answerText: []
       }
   },
   methods: {
@@ -43,23 +44,36 @@ export default {
           }).then(data => data.json()).then(result => {
               twitch.rig.log(result);
               this.questions = result;
+              result.forEach((x, i) => {
+                  
+                  this.showInput[i] = false;
+                 // this.$set(this.showIndex, index, false);
+              })
           });
       },
-      showInputChange(){
-          twitch.rig.log(`showInput: ${this.showInput}`);
-          this.showInput = !this.showInput;
+      showInputChange(index){
+          twitch.rig.log(`showInput: ${this.showInput[index]}`);
+          if (this.showInput[index] == undefined) {
+            this.showInput[index] = false;
+        }
+
+            this.showInput = { ...this.showInput, [index]: !this.showInput[index] };
+          
+
+         
       },
-      submitAnswer(id) {
+      submitAnswer(id, index) {
           fetch(`${ROOT_URL}answer`, {
               method: 'POST',
               headers: new Headers({'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}),
               body: JSON.stringify({
-                  answer: this.answerText,
+                  answer: this.answerText[index],
                   id: id
                   })
           }).then(result => result.json())
           .then(data => {
               console.log(data);
+              this.answerText[index] = '';
           })
       }
 
@@ -74,8 +88,30 @@ export default {
     twitch.rig.log(`channelID: ${channelID}`);
     console.log(`does the userID load ${userID}`);
     this.pullQuestions();
+
 });
     
   }
 }
 </script>
+
+<style scoped>
+.answerBtn {
+    margin-top: 10px;
+    padding-right: 95px;
+    padding-left: 95px;
+    background-color: #6441A4;
+    color: #f8991d !important;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.submitAnswerBtn{
+     margin-top: 10px;
+    padding-right: 95px;
+    padding-left: 95px;
+    background-color: #6441A4;
+    color: #f8991d !important;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+</style>
