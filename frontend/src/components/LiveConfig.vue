@@ -52,14 +52,12 @@ export default {
           });
       },
       showInputChange(index){
-          twitch.rig.log(`showInput: ${this.showInput[index]}`);
-          if (this.showInput[index] == undefined) {
-            this.showInput[index] = false;
+        twitch.rig.log(`showInput: ${this.showInput[index]}`);
+        if (this.showInput[index] == undefined) {
+        this.showInput[index] = false;
         }
 
-            this.showInput = { ...this.showInput, [index]: !this.showInput[index] };
-          
-
+        this.showInput = { ...this.showInput, [index]: !this.showInput[index] };
          
       },
       submitAnswer(id, index) {
