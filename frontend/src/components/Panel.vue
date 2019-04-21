@@ -19,7 +19,7 @@
 </template>
 
 <script>
-const ROOT_URL = 'http://127.0.0.1:3000/';
+const ROOT_URL = 'https://75k6u78ho9.execute-api.us-east-1.amazonaws.com/prod/';
 let userID = '';
 let channelID= '';
 let token = '';
@@ -48,6 +48,7 @@ export default {
           });
       },
       askAQuestion(){
+          console.log('here' + token);
           fetch(`${ROOT_URL}question`, {
               method: 'PUT',
               headers: new Headers({'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}),
@@ -70,12 +71,12 @@ export default {
   async beforeMount() {
     console.log(`This is the userID:${userID}`);
     await twitch.onAuthorized((auth) => {  
-    userID = auth.userId;
-    twitch.rig.log(`userID: ${userID}`);
-    channelID = auth.channelId; 
-    token = auth.token;
-    console.log(`does the userID load ${userID}`);
-    this.pullQuestions();
+      userID = auth.userId;
+      twitch.rig.log(`userID: ${userID}`);
+      channelID = auth.channelId; 
+      token = auth.token;
+      console.log(`does the userID load ${userID}`);
+      this.pullQuestions();
 });
     
   }

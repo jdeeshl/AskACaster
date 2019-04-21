@@ -19,7 +19,7 @@
 </template>
 
 <script>
-const ROOT_URL = 'http://127.0.0.1:3000/';
+const ROOT_URL = 'https://75k6u78ho9.execute-api.us-east-1.amazonaws.com/prod/';
 let userID = '';
 let channelID= '';
 let token = '';
@@ -80,7 +80,6 @@ export default {
     console.log(`This is the userID:${userID}`);
     await twitch.onAuthorized((auth) => {  
     userID = auth.userId;
-   
     channelID = auth.channelId; 
     token = auth.token;
     twitch.rig.log(`channelID: ${channelID}`);

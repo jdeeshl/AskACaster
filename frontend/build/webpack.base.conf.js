@@ -14,7 +14,7 @@ module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
     panel: './src/panel.js',
-    liveconfig: './src/liveconfig.js',
+    liveconfig: './src/live_config.js',
   },
   output: {
     path: config.build.assetsRoot,
