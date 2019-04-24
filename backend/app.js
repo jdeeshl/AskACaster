@@ -57,12 +57,12 @@ router.post('/answer', async (req, res) => {
 
 const putQuestion = async(questionBody) => {
   console.log(questionBody);
-  const { user_id, channel_id, question, postedToForum } = questionBody;
+  const { user_id, channel_id, question, postedToForum, displayName } = questionBody;
   const id = uuidv4(); 
   var params = {
     TableName: tableName,
     Item: {
-      id, user_id, channel_id, question, postedToForum
+      id, user_id, channel_id, question, postedToForum, displayName
     }
   }
 
