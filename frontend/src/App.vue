@@ -19,4 +19,12 @@ export default {
   color: #2c3e50;
   margin-top: 40px;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
 </style>

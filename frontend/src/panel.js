@@ -3,11 +3,11 @@
 import Vue from 'vue'
 import Panel from './components/Panel'
 import router from './router'
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import Notifications from 'vue-notification'
 
-Vue.use(BootstrapVue);
+import './app.css'
+
+Vue.use(Notifications)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

@@ -4,31 +4,10 @@
   "backendFolderName": "/Users/nickik/Projects/AskCaster/backend",
   "extensionViews": [
     {
-      "id": "1",
-      "label": "Panel",
-      "channelId": "182891647",
-      "type": "panel",
-      "features": {
-        "isChatEnabled": false
-      },
-      "linked": false,
-      "linkedUserId": "",
-      "opaqueId": "1234",
-      "mode": "viewer",
-      "isPopout": false,
-      "role": "Logged-In Viewer",
-      "x": 0,
-      "y": 0,
-      "orientation": "Portrait",
-      "frameSize": {
-        "width": 640,
-        "height": 480
-      }
-    },
-    {
       "id": "2",
-      "label": "LiveConfig",
+      "label": "",
       "channelId": "182891647",
+      "displayChannelName": "mauerbac",
       "type": "dashboard",
       "features": {
         "isChatEnabled": false
@@ -38,6 +17,28 @@
       "mode": "dashboard",
       "isPopout": false,
       "role": "Broadcaster",
+      "x": 0,
+      "y": 0,
+      "orientation": "Portrait",
+      "frameSize": {
+        "width": 640,
+        "height": 480
+      }
+    },
+    {
+      "id": "3",
+      "label": "",
+      "channelId": "182891647",
+      "displayChannelName": "mauerbac",
+      "type": "panel",
+      "features": {
+        "isChatEnabled": false
+      },
+      "linked": true,
+      "linkedUserId": "182891647",
+      "mode": "viewer",
+      "isPopout": false,
+      "role": "Logged-In Viewer",
       "x": 0,
       "y": 0,
       "orientation": "Portrait",

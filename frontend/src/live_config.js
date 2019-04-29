@@ -3,11 +3,9 @@
 import Vue from 'vue'
 import LiveConfig from './components/LiveConfig'
 import router from './router'
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-Vue.use(BootstrapVue);
+import './app.css'
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
