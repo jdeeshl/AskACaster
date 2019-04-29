@@ -44,18 +44,18 @@ router.get('/channelquestions', async (req, res) => {
   res.json(questions);
 })
 
-router.put('/question', async (req, res) => {
+router.post('/question', async (req, res) => {
   console.log(req.body);
-  let put = await putQuestion(req.body);
+  let put = await postQuestion(req.body);
   res.json(put);
 })
 
-router.post('/answer', async (req, res) => {
+router.put('/answer', async (req, res) => {
   let answer = await updateQuestionAnswer(req.body);
   res.json(answer);
 })
 
-const putQuestion = async(questionBody) => {
+const postQuestion = async(questionBody) => {
   console.log(questionBody);
   const { user_id, channel_id, question, postedToForum, displayName } = questionBody;
   const id = uuidv4(); 
