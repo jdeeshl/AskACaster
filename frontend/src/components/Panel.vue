@@ -65,9 +65,7 @@ export default {
                     channel_id: `${channelID}`,
                     question: this.questionText,
                     postedToForum: false,
-                    // matt. isn't it.
-                    displayName: displayName, // ?
-                    display_name: displayName
+                    displayName: displayName
               })
           })
           .then(result => result.json())
@@ -83,7 +81,7 @@ export default {
       }
   },
   
-  async beforeMount() {
+  async mounted() {
     
     await twitch.onAuthorized((auth) => { 
         const authedUser = twitch.viewer;
@@ -107,7 +105,7 @@ export default {
   },
 }
 </script>
-f
+
 <style scoped>
 * {
     box-sizing: border-box;
