@@ -1,6 +1,10 @@
 <template>
-    <div>
-        <div class="container">
+    <div v-bind:class=dspClass>
+        <div class="container loginplease">
+            <h2 class="title">Ask A Question</h2>
+            <p>To use Ask A Question, you need to share your TwitchID with us. To do so <span @click="authAQuestion" id="authAQuestion">Click here</span></p>
+        </div>
+        <div class="container askQuestion">
             <notifications position="bottom" />
             <h2 class="title">Ask A Question</h2>
             <textarea class="question-input" v-model="questionText" placeholder="Ask the broadcaster a question..."></textarea>
@@ -9,7 +13,7 @@
             </div>
         </div>
         <div class="container questions">
-            <h3 class="title">Previous Questions </h3> 
+            <h3 class="title">Previous Questions </h3>
             <ul v-show="questions.length > 0" class="question-list">
                 <li v-for="(question, index) in questions" :key="index">
                     <div class="question-item">
@@ -37,6 +41,7 @@ export default {
   name: 'Panel',
   data() {
       return {
+          dspClass: 'loginplease',
           questions: [],
           questionText: '',
           uiMessage: '',
@@ -44,6 +49,9 @@ export default {
       }
   },
   methods: {
+      authAQuestion(){
+        twitch.actions.requestIdShare();
+      },
       pullQuestions(){
           console.log('Polling questions');
           fetch(`${ROOT_URL}questions?user_id=${userID}`,{
@@ -80,14 +88,15 @@ export default {
           })
       }
   },
-  
+
   async mounted() {
-    
-    await twitch.onAuthorized((auth) => { 
+
+    await twitch.onAuthorized((auth) => {
         const authedUser = twitch.viewer;
-        if (!authedUser) {
-            return; 
+        if (!authedUser.isLinked) {
+            return;
         }
+        this.dspClass = 'loggedin';
         fetch(`https://api.twitch.tv/helix/users?id=${authedUser.id}`, {headers})
             .then((res) => res.json())
             .then((res) => {
@@ -95,12 +104,12 @@ export default {
                 userID = user.id;
                 displayName = user.display_name;
                 twitch.rig.log(user);
-                channelID = auth.channelId; 
+                channelID = auth.channelId;
                 token = auth.token;
                 this.pullQuestions();
             })
             .catch((err) => console.error('Something broke.', err));
-        
+
     });
   },
 }
@@ -110,14 +119,18 @@ export default {
 * {
     box-sizing: border-box;
 }
-body {
-    font-family: sans-serif;
+body, p {
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 .container {
     background: #FAF9FA;
     padding: 20px;
 }
+.loggedin .loginplease { display: none; }
+.loginplease .askQuestion { display: none; }
+.loginplease .questions { display: none; }
+#authAQuestion { cursor: pointer; }
 
 .question-list {
     margin: 0;
@@ -166,7 +179,7 @@ body {
 .askQuestionBtn {
     color: #fff;
     font-size: 12px;
-    font-family: sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
     padding: 0 6px;
     margin: 10px 0 0 auto;
     line-height: 30px;
@@ -206,7 +219,7 @@ body {
     left: 20px;
     top: 194px;
 
-    font-family: 'Helvetica Neue';
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
     font-size: 24px;
     line-height: 29px;
 
@@ -217,7 +230,7 @@ body {
 }
 
 .title {
-    font-family: Helvetica Neue;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
     font-size: 24px;
     line-height: 29px;
     color: #19171C;
