@@ -27,7 +27,7 @@
 </template>
 
 <script>
-const ROOT_URL = 'https://75k6u78ho9.execute-api.us-east-1.amazonaws.com/prod/';
+const ROOT_URL = 'https://localhost:3000/';
 const twitch = window.Twitch.ext;
 
 let userID = '';

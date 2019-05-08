@@ -12,7 +12,7 @@ const jwt = require('express-jwt')
 const dynamodb = new AWS.DynamoDB.DocumentClient({region: 'us-west-2'})
 const tableName = 'Twitch_Questions';
 const uuidv4 = require('uuid/v4');
-
+const https = require('https');
 
 if (process.env.NODE_ENV === 'test') {
   // NOTE: aws-serverless-express uses this app for its integration tests
@@ -31,7 +31,16 @@ router.use(bodyParser.urlencoded({ extended: true }))
 router.use(awsServerlessExpressMiddleware.eventContext())
 
 // Auth protected routes for twitch extension
-app.use(jwt({ secret }));
+app.use(jwt({ secret: secret,
+  getToken: function fromHeaderOrQuerystring (req) {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        return req.headers.authorization.split(' ')[1];
+    } else if (req.query && req.query.token) {
+      return req.query.token;
+    }
+    return null;
+  }
+}));
 
 router.get('/questions', async (req, res) =>{
   
@@ -46,14 +55,57 @@ router.get('/channelquestions', async (req, res) => {
 
 router.post('/question', async (req, res) => {
   console.log(req.body);
+   let {channelId, clientId} = req.body.auth;
+   console.log(channelId);
+  let token = app.getToken(req);
+  console.log(token);
   let put = await postQuestion(req.body);
+  let twitchpubsubPost = await postToTwitchPubSub('newquestion', token, channelId, clientId);
+  console.log(twitchpubsubPost)
   res.json(put);
+
 })
 
 router.put('/answer', async (req, res) => {
   let answer = await updateQuestionAnswer(req.body);
   res.json(answer);
 })
+
+const postToTwitchPubSub = async(message, token, channelId, clientId) => {
+  // use twitch pubsub 
+
+    fetch(`https://api.twitch.tv/extensions/message/${channelId}`, {
+      method: 'POST',
+      headers: {
+          'Authorization': `Bearer ${token}`,
+          'Client-Id': clientId,
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          content_type: 'application/json',
+          message: { message: message },
+          targets: ['broadcast']
+      })
+  })
+      .then(response => response.json())
+      .then(response => {
+          console.log(response);
+      })
+      .catch(err => { console.log(err) });
+}
+
+function makeServerToken(channelId, userId) {
+  const payload = {
+      exp: Math.floor(Date.now() / 1000) + 30,
+      channel_id: channelId.toString(),
+      user_id: userId.toString(),
+      role: 'external',
+      pubsub_perms: {
+          send: ['broadcast']
+      }
+  };
+  return jwt.sign(payload, secret, { algorithm: 'HS256' });
+}
 
 const postQuestion = async(questionBody) => {
   console.log(questionBody);
@@ -143,6 +195,7 @@ const getQuestionsByChannel = async(channelid) => {
 // Domain Socket for you, so you can remove the usual call to app.listen.
 // app.listen(3000)
 app.use('/', router)
+//https.createServer(router);
 
 // Export your express server so you can import it in the lambda function.
 module.exports = app

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div>
-            <h3 class="title"> Channel Questions </h3> 
+            <h3 class="title"> Channel Questions Test </h3> 
             <hr />
             <ul class="question-list" v-show="questions.length > 0">
                     <li class="question-item" v-for="(question, index) in questions" :key="index">
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-const ROOT_URL = 'https://75k6u78ho9.execute-api.us-east-1.amazonaws.com/prod/';
+const ROOT_URL = 'https://localhost:3000/';
 let userID = '';
 let channelID= '';
 let token = '';
